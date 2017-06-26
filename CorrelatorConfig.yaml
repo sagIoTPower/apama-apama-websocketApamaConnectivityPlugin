@@ -1,0 +1,93 @@
+###############################################################################
+# $Copyright (c) 2016 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.$
+# Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG
+###############################################################################
+
+#To set the default log file and level for an EPL package, monitor, or event, specify
+# logging details in the [ApplicationLogging] section of the extended configuration file. 
+#For example:
+#eplLogging:
+#  com.myCompany.Client:
+#    file: apama/Client.log
+#    level: DEBUG
+#  com.myCompany.Internal: { level: ERROR }
+
+
+#See "Setting log files and log levels in a YAML configuration file" in the documentation for more
+# information about the supported options.
+# $Copyright(c) 2016 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.$
+# Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG
+
+# Load the WebsocketServer transport plug-in and the JSON codec plug-in
+connectivityPlugins:
+  WebsocketServer:
+    directory: ${PARENT_DIR}/websocket
+    classpath: websocket-connectivity-plugin.jar
+    class: com.softwareag.samples.WebsocketServer
+  WebsocketClient:
+    directory: ${PARENT_DIR}/websocket
+    classpath: websocket-sample.jar
+    class: com.softwareag.samples.WebsocketClient
+  JSONCodec:
+    directory: ${APAMA_HOME}/lib/
+    classpath: json-codec.jar
+    class: com.softwareag.connectivity.plugins.JSONCodec
+
+startChains:
+  # Create a chain in which JSON-formatted PUT requests sent to the HTTP server
+  # get turned into EPL events
+  websocketServerChain:
+    # When this host plug-in is sent messages from the transport that contain
+    # map<string, object>, it will attempt to turn those maps into EPL events.
+    # Fields will be filled in based on the values of the keys that match those
+    # field names.
+    #
+    # By default that event type will be 'FromJSON' (unless the message
+    # meta-data explicitly contains a 'sag.type' entry to say otherwise, which
+    # it doesn't in this example)
+    #
+    # If not all fields of the event can be populated, that's ok (because of
+    # allowMissing). They'll just be filled in with default values such as 0,
+    # "", 0.0 etc.
+    - apama.eventMap:
+        defaultEventType: WebsocketServerEvent
+        allowMissing: true
+    # Any messages passing through this codec from the transport are assumed to
+    # have string payloads containing JSON documents. This codec translates them
+    # into map<string, object> payloads which get sent up towards the host.
+    - JSONCodec
+    # Sends messages up the chain in response to PUT requests. The payload will
+    # be a string containing the body of the request. In this sample the body
+    # will contain a JSON document.
+    - WebsocketServer:
+        port: ${websocketServerChain.WebsocketServer.port} # configured in websocketserver.properties
+        hostname: ${websocketServerChain.WebsocketServer.hostname} # configured in websocketserver.properties
+        context: ${websocketServerChain.WebsocketServer.context} # configured in websocketserver.properties
+        
+  websocketClientChain:
+    # When this host plug-in is sent messages from the transport that contain
+    # map<string, object>, it will attempt to turn those maps into EPL events.
+    # Fields will be filled in based on the values of the keys that match those
+    # field names.
+    #
+    # By default that event type will be 'FromJSON' (unless the message
+    # meta-data explicitly contains a 'sag.type' entry to say otherwise, which
+    # it doesn't in this example)
+    #
+    # If not all fields of the event can be populated, that's ok (because of
+    # allowMissing). They'll just be filled in with default values such as 0,
+    # "", 0.0 etc.
+    - apama.eventMap:
+        defaultEventType: WebsocketClientEvent
+        allowMissing: true
+    # Any messages passing through this codec from the transport are assumed to
+    # have string payloads containing JSON documents. This codec translates them
+    # into map<string, object> payloads which get sent up towards the host.
+    - JSONCodec
+    # Sends messages up the chain in response to PUT requests. The payload will
+    # be a string containing the body of the request. In this sample the body
+    # will contain a JSON document.
+    - WebsocketClient:
+        url: ${websocketClientChain.WebsocketClient.url} # configured in websocketserver.properties
+        username: ${websocketClientChain.WebsocketClient.username} # configured in websocketserver.properties
+        password: ${websocketClientChain.WebsocketClient.password} # configured in websocketserver.properties

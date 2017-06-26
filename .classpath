@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="build_work" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="var" path="JRE_LIB" sourcepath="JRE_SRC"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/connectivity-plugins-api.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/javax.websocket-api-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/tyrus-core-1.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/tyrus-server-1.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/tyrus-container-servlet-1.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/tyrus-container-grizzly-server-1.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/grizzly-http-2.3.25.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/grizzly-http-server-2.3.25.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/tyrus-container-grizzly-client-1.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/tyrus-spi-1.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/grizzly-framework-2.3.25.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/ws/tyrus-client-1.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/SoftwareAG/Apama/lib/slf4j-api.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

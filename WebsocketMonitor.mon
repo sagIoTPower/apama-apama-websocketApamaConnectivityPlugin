@@ -1,0 +1,33 @@
+//*****************************************************************************
+// $Copyright(c) 2016 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.$
+// Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG
+//
+//*****************************************************************************
+using com.softwareag.connectivity.ConnectivityPlugins;
+
+event WebsocketServerEvent {
+	sequence<float> seqField;
+	integer integerField;
+	string stringField;
+}
+event WebsocketClientEvent {
+	sequence<float> seqField;
+	integer integerField;
+	string stringField;
+}
+
+monitor WebsocketMonitor {
+	action onload() {
+		(new ConnectivityPlugins).onApplicationInitialized();
+
+		on all WebsocketServerEvent() as j {
+			log "Got an event through serverChain:" + j.toString() at INFO;
+			j.stringField := "Returned" + j.stringField  ;
+			send j to "websocketServerChain";
+		}
+		
+		on all WebsocketClientEvent() as j {
+			log "Got an event clientChain:" + j.toString() at INFO;
+		}
+	}
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	Copyright (c) 2016 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.$ 
+	Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG 
+-->
+<project default="jars" basedir="." name="Connectivity plugin build">
+
+	<presetdef name="javac">
+		<javac includeantruntime="false" />
+	</presetdef>
+
+	<property environment="env"/>
+    <property name="env.APAMA_HOME" location="C:\SoftwareAG\Apama"/>
+	<!--<echo>Environment dir: ${env.APAMA_HOME}</echo>-->
+	<property name="APAMA_HOME" location="${env.APAMA_HOME}"/>
+	<fail unless="env.APAMA_HOME" message="Please run the bin/apama_env script before attempting to build this sample."/>
+
+	<property name="apama-home-jar-dir" location="${env.APAMA_HOME}/lib"/>
+	<property name="output-dir" location="${user.dir}/websocket"/>
+	<property name="3rdparty-dir" location="${output-dir}/lib/"/>
+	<property name="build-dir" location="${user.dir}/build_work"/>
+	
+	<echo>Build dir: ${build-dir}</echo>
+	<tstamp/>
+
+	<path id="main-classpath">
+		<fileset dir="${apama-home-jar-dir}/">
+			<include name ="connectivity-plugins-api.jar"/>
+		</fileset>
+		<fileset dir="${apama-home-jar-dir}/ws/">
+			<include name ="javax.websocket-api-1.1.jar"/>
+			<include name ="tyrus-server-1.13.1.jar"/>
+			<include name ="tyrus-core-1.13.1.jar"/>
+			<include name ="tyrus-spi-1.13.1.jar"/>
+			<include name ="tyrus-container-servlet-1.13.1.jar"/>
+			<include name ="tyrus-container-grizzly-server-1.13.1.jar"/>
+			<include name ="tyrus-container-grizzly-client-1.13.1.jar"/>
+			<include name ="grizzly-framework-2.3.25.jar"/>
+			<include name ="grizzly-http-2.3.25.jar"/>
+			<include name ="grizzly-http-server-2.3.25.jar"/>
+			<include name ="javax.inject-1.jar"/>
+		</fileset>
+	</path>
+
+	<!-- Setup the build directory, our .class files will go here -->
+	<target name="setup">
+		<mkdir dir="${build-dir}"/>
+		<mkdir dir="${output-dir}"/>
+	</target>
+
+	
+	<!-- Compiles .class files -->
+	<target name="compile" depends="clean, setup">
+		<javac srcdir="./src/" destdir="${build-dir}" debug="true">
+			<exclude name="org/glassfish/*" />
+			<classpath refid="main-classpath"/>
+		</javac>
+	</target>
+
+	<!-- Make the jar for the Websocket server sample, including the index.html for GET requests -->
+	<target name="jars" depends="compile">
+		<jar jarfile="${output-dir}/websocket-connectivity-plugin.jar">
+			<fileset dir="${build-dir}/"/>
+			<manifest>
+				<attribute name="Implementation-Title" value="Websocket Server Connectivity Plug-in Sample"/>
+				<attribute name="Implementation-Version" value="v1.0 (${TODAY})"/> 
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- Erase everything we built -->
+	<target name="clean">
+		<delete dir="${build-dir}"/>
+		<delete dir="${output-dir}"/>
+	</target>
+</project>

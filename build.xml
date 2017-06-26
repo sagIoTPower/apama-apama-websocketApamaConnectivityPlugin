@@ -18,7 +18,7 @@
 	<property name="apama-home-jar-dir" location="${env.APAMA_HOME}/lib"/>
 	<property name="output-dir" location="${user.dir}/websocket"/>
 	<property name="3rdparty-dir" location="${output-dir}/lib/"/>
-	<property name="build-dir" location="${user.dir}/build_work"/>
+	<property name="build-dir" location="${user.dir}/build"/>
 	
 	<echo>Build dir: ${build-dir}</echo>
 	<tstamp/>

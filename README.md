@@ -1,3 +1,5 @@
+# apama-apama-websocketApamaConnectivityPlugin
+
 SAMPLE
 
    Sample Java Connectivity Plug-in implementing an websocket client and server transport
